@@ -1,7 +1,8 @@
-const multer = require('multer');
-const {v4: uuid} = require('uuid');
+const multer = require('multer')
+const {v4: uuid} = require('uuid')
+const logger = require('../helpers/logger')
 
-console.debug('app => helpers => multer');
+logger.debug('app => helpers => multer')
 
 const MIME_TYPES = {
     'image/jpg': 'jpg',
@@ -11,7 +12,7 @@ const MIME_TYPES = {
 
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
-        callback(null, 'public/avatars')
+        callback(null, 'public/images')
     },
 
     filename: async (req, file, callback) => {
@@ -21,4 +22,4 @@ const storage = multer.diskStorage({
     }
 })
 
-module.exports = multer({storage}).single('avatars');
+module.exports = multer({storage}).single('images');
