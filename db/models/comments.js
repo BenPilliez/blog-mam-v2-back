@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       comments.hasMany(models.comments, {as:'Parent', foreignKey:'id'})
       comments.belongsTo(models.comments, {as: 'Children'})
-      comments.belongTo(models.postId, {
+      comments.belongsTo(models.postId, {
         foreignKey: 'postsId',
         onDelete: "CASCADE"
       })
