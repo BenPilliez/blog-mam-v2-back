@@ -1,0 +1,29 @@
+{
+  "name": "blog-mam-v2-back",
+  "version": "0.0.1",
+  "description": "Version 2 du blog de maman ",
+  "main": "app.js",
+  "repository": "git@github.com:BenPilliez/blog-mam-v2-back.git",
+  "author": "Benjamin Pilliez <benjamin.pilliez@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "db:init": "sequelize-cli init",
+    "db:create": "sequelize db:create && sequelize db:migrate && sequelize db:seed:all",
+    "dev": "nodemon app.js",
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "bcrypt": "^5.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "multer": "^1.4.2",
+    "mysql": "^2.18.1",
+    "mysql2": "^2.2.5",
+    "sequelize": "^6.3.5",
+    "sequelize-cli": "^6.2.0",
+    "uuid": "^8.3.1",
+    "winston": "^3.3.3"
+  }
+}
