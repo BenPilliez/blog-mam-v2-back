@@ -3,7 +3,7 @@ const models = require('../db/models')
 const {getPagingData} = require('../helpers/getPagingData')
 
 
-const DEFAUlT_PHOTOS = ['']
+const DEFAUlT_PHOTOS = ['nature.jpg', 'foret.jpg', 'prairie.jpg']
 
 module.exports = {
     get_posts: async (req, res) => {
@@ -19,9 +19,6 @@ module.exports = {
                 include: [
                     {
                         model: models.category
-                    },
-                    {
-                        model: models.rates
                     }
                 ],
                 limit: limit,
@@ -75,15 +72,17 @@ module.exports = {
                 req.files.map((file) => {
                     body['photos'] = [...body['photos'], file.filename]
                 })
+            } else {
+                body['photos'] = DEFAUlT_PHOTOS
             }
 
             const post = await models.posts.create(req.body, {
-                include:{
-                    rates:{
-                        nb_rates: 0
-                    }
+                rates: {
+                    rate: 0,
+                    nb_rates: 0
                 }
             })
+
             return res.json(post)
 
         } catch (e) {
@@ -119,19 +118,19 @@ module.exports = {
             return res.status(500).json({error: e})
         }
     },
-    delete_post: async(req,res) => {
+    delete_post: async (req, res) => {
         logger.debug('app => postsController => delete_post')
-        try{
+        try {
             const post = await models.posts.findByPk(req.params.id)
 
-            if(!post){
+            if (!post) {
                 return res.sendStatus(404)
             }
 
             post.destroy()
             return res.sendStatus(200)
 
-        }catch (e) {
+        } catch (e) {
             logger.error(e)
             return res.status(500).json({error: e})
         }

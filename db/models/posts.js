@@ -22,10 +22,10 @@ module.exports = (sequelize, DataTypes) => {
             })
 
             posts.hasMany(models.comments, {
-                foreignKey: 'commentsId'
+                foreignKey: 'postsId'
             })
             posts.hasOne(models.rates, {
-                foreignKey: 'ratesId'
+                foreignKey: 'postsId'
             })
         }
     }
@@ -33,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
     posts.init({
         title: {type: DataTypes.STRING, allowNull: false},
         content: {type: DataTypes.TEXT, allowNull: false},
-        slug: {type: DataTypes.STRING, unique: true, allowNull: false},
+        slug: {type: DataTypes.STRING, unique: true},
         photos: {
             type: DataTypes.TEXT, allowNull: true,
             set(value) {
@@ -62,8 +62,7 @@ module.exports = (sequelize, DataTypes) => {
     })
 
     SequelizeSlugify.slugifyModel(posts, {
-        source: ['title'],
-        suffixSource: ['id']
+        source: ['title']
     })
 
     return posts

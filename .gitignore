@@ -51,7 +51,7 @@ build/Release
 node_modules/
 jspm_packages/
 db/seeders
-
+public/images/
 # Snowpack dependency directory (https://snowpack.dev/)
 web_modules/
 
