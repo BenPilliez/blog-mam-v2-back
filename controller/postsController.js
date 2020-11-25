@@ -10,7 +10,15 @@ const INCLUDE = [
         },
         {
             model: models.category
-        }]
+        },
+        {
+            model:models.comments,
+            include:{
+                model: models.comments,
+                as: 'Children'
+            }
+        }
+        ]
 
 
 module.exports = {

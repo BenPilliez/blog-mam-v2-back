@@ -10,8 +10,13 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
+      comments.belongsTo(models.users, {
+        foreignKey: 'usersId',
+        onDelete: "CASCADE",
+
+      })
       comments.hasMany(models.comments, {as:'Parent', foreignKey:'id'})
-      comments.belongsTo(models.comments, {as: 'Children'})
+      comments.belongsTo(models.comments, {as: 'Children', onDelete:"CASCADE"})
       comments.belongsTo(models.posts, {
         foreignKey: 'postsId',
         onDelete: "CASCADE"
@@ -19,10 +24,18 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   comments.init({
-    author: DataTypes.STRING,
-    content: DataTypes.TEXT,
-    email: DataTypes.STRING,
-    published: DataTypes.BOOLEAN
+    content: {type: DataTypes.TEXT, allowNull:false, validate: {notNull: {msg: "Un commentaire vide ? "}, notEmpty: {msg: "Un commentaire vide ?"}}},
+    published: {type: DataTypes.BOOLEAN, defaultValue: false, allowNull: false},
+    createdAt: {
+      allowNull: false,
+      type: DataTypes.DATE,
+      defaultValue: sequelize.now
+    },
+    updatedAt: {
+      allowNull: false,
+      type: DataTypes.DATE,
+      defaultValue: sequelize.now
+    }
   }, {
     sequelize,
     modelName: 'comments',

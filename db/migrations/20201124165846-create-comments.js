@@ -10,10 +10,20 @@ module.exports = {
       },
       commentsId:{
         type: Sequelize.INTEGER,
+        onDelete: "CASCADE",
         references: {
           model: 'comments',
           key: 'id',
           as :'commentsId'
+        }
+      },
+      usersId:{
+        type: Sequelize.INTEGER,
+        onDelete: "CASCADE",
+        references: {
+          model: 'users',
+          key: 'id',
+          as :'usersId',
         }
       },
       postsId:{
@@ -26,25 +36,24 @@ module.exports = {
           as:'postsId'
         }
       },
-      author: {
-        type: Sequelize.STRING
-      },
       content: {
-        type: Sequelize.TEXT
-      },
-      email: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT,
+        allowNull: false
       },
       published: {
-        type: Sequelize.BOOLEAN
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.now
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.now
       }
     });
   },

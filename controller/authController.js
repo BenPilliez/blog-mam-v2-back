@@ -3,6 +3,18 @@ const jwt = require('jsonwebtoken')
 const models = require('../db/models')
 
 module.exports = {
+    signup: async (req, res) => {
+        logger.debug("app => authController => signup")
+        try {
+
+            const user = await models.users.create(req.body)
+            return res.json(user)
+
+        } catch (e) {
+            logger.error(e)
+            return res.status(500).json({error: e})
+        }
+    },
     signin: async (req, res) => {
         logger.debug("app => authController => signin");
 
