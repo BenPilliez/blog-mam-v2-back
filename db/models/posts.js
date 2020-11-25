@@ -24,8 +24,9 @@ module.exports = (sequelize, DataTypes) => {
             posts.hasMany(models.comments, {
                 foreignKey: 'postsId'
             })
+
             posts.hasOne(models.rates, {
-                foreignKey: 'postsId'
+                foreignKey: 'postsId',
             })
         }
     }

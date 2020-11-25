@@ -8,6 +8,15 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      postsId:{
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references:{
+          model: 'posts',
+          key: 'id',
+          as: 'postsId'
+        }
+      },
       rate:{
         type: Sequelize.FLOAT
       },

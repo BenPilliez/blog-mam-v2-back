@@ -19,6 +19,9 @@ module.exports = {
                 include: [
                     {
                         model: models.category
+                    },
+                    {
+                        model: models.rates
                     }
                 ],
                 limit: limit,
@@ -76,12 +79,16 @@ module.exports = {
                 body['photos'] = DEFAUlT_PHOTOS
             }
 
-            const post = await models.posts.create(req.body, {
-                rates: {
-                    rate: 0,
-                    nb_rates: 0
-                }
-            })
+            body['rate'] = {
+                rate: 0,
+                nb_rates: 0
+            }
+            body['usersId'] = req.user.id
+
+
+            const post = await models.posts.create(body, {
+                    include: [models.rates],
+                })
 
             return res.json(post)
 

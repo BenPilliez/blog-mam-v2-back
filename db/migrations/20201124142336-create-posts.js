@@ -28,15 +28,6 @@ module.exports = {
                     as: 'categoryId'
                 }
             },
-            ratesId: {
-                type: Sequelize.INTEGER,
-                allowNull: true,
-                references: {
-                    model: 'rates',
-                    key: 'id',
-                    as: 'ratesId'
-                }
-            },
             title: {
                 type: Sequelize.STRING,
                 allowNull: false
