@@ -16,7 +16,7 @@ const categoryAdminRouter = require('./routes/admin/categoryRouter')
 const authAdminRouter = require('./routes/admin/authRouter')
 const rateRouter = require('./routes/api/rateRouter')
 const commentsRouter = require('./routes/api/commentsRouter')
-const authApiRouter = require('./routes/api/authController')
+const authApiRouter = require('./routes/api/authRouter')
 
 
 // Pour o2switch panel
