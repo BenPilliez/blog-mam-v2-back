@@ -145,7 +145,7 @@ module.exports = {
                 return res.sendStatus(404)
             }
 
-            post.destroy()
+            await post.destroy()
             return res.sendStatus(200)
 
         } catch (e) {
@@ -164,7 +164,7 @@ module.exports = {
                 return res.sendStatus(404)
             }
 
-            post.update({
+            await post.update({
                 published: req.body.published
             })
 

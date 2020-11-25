@@ -76,13 +76,13 @@ module.exports = {
     update_category: async (req, res) => {
         logger.debug('app => categoryController => update_category')
         try {
-            const category = await models.category.findByPk(req.params.id)
+            let category = await models.category.findByPk(req.params.id)
 
             if (!category) {
                 return res.sendStatus(400)
             }
 
-            category.update(req.body)
+            await category.update(req.body)
             return res.json(category)
 
         } catch (e) {
