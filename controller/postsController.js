@@ -4,6 +4,14 @@ const {getPagingData} = require('../helpers/getPagingData')
 
 
 const DEFAUlT_PHOTOS = ['nature.jpg', 'foret.jpg', 'prairie.jpg']
+const INCLUDE = [
+        {
+            model: models.rates
+        },
+        {
+            model: models.category
+        }]
+
 
 module.exports = {
     get_posts: async (req, res) => {
@@ -17,14 +25,7 @@ module.exports = {
 
             query = {
                 where: {},
-                include: [
-                    {
-                        model: models.category
-                    },
-                    {
-                        model: models.rates
-                    }
-                ],
+                include:INCLUDE,
                 limit: limit,
                 offset: offset
             }
@@ -56,7 +57,8 @@ module.exports = {
             const post = await models.posts.findOne({
                 where: {
                     slug: req.params.slug
-                }
+                },
+                include: INCLUDE
             })
 
             if (!post) {
@@ -92,9 +94,8 @@ module.exports = {
             }
             body['usersId'] = req.user.id
 
-
             const post = await models.posts.create(body, {
-                include: [models.rates],
+                include: [{model: models.rates}],
             })
 
             return res.json(post)
@@ -109,7 +110,9 @@ module.exports = {
 
         try {
 
-            let post = await models.posts.findByPk(req.params.id)
+            const post = await models.posts.findByPk(req.params.id,{
+                include: INCLUDE
+            })
 
             if (!post) {
                 return res.status(404).json("Aucun post")
@@ -118,6 +121,7 @@ module.exports = {
             const body = req.body
             body['photos'] = post.photos
 
+
             if (req.files && req.files.length > 0) {
                 req.files.map((file) => {
                     body['photos'] = [...body['photos'], file.filename]
@@ -125,7 +129,7 @@ module.exports = {
             }
 
             await post.update(req.body)
-            return res.sendStatus(200).json(post)
+            return res.json(post)
 
         } catch (e) {
             logger.error(e)
