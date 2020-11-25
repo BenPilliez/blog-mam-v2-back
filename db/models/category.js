@@ -18,8 +18,8 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     category.init({
-        name: {type: DataTypes.STRING, allowNull: false, unique: {msg: 'Une catégorie existe déjà avec ce nom'}},
-        slug: {type: DataTypes.STRING, allowNull: false, unique: true},
+        name: {type: DataTypes.STRING, allowNull: false, unique: {args: true, msg: "Une catégorie existe déjà avec ce nom"}},
+        slug: {type: DataTypes.STRING, unique: true},
         createdAt: {
             type: DataTypes.DATE,
             allowNull: false,

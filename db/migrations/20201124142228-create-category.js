@@ -10,10 +10,12 @@ module.exports = {
       },
       name: {
         type: Sequelize.STRING,
+        unique:true,
         allowNull:false
       },
       slug: {
         type: Sequelize.STRING,
+        unique:true,
         allowNull:false
       },
       createdAt: {

@@ -47,7 +47,8 @@ module.exports = {
             },
             slug: {
                 type: Sequelize.STRING,
-                allowNull: false
+                allowNull: false,
+                unique:true
             },
             published: {
                 type: Sequelize.BOOLEAN,

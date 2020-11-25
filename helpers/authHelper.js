@@ -20,13 +20,9 @@ module.exports = {
 
             req.user = jwt.decode(token, process.env.JWT_SECRET);
 
-            //On vérifie dans le param en cas de route users
-            if (req.baseUrl === "/api/users" && req.params.id && req.params.id !== req.user.id) {
-                return res.status(401).json({error: "Seul le titulaire peut effectuer cette action"});
-            }
             //On vérifie dans le body en cas de posts ou autre
-            if (req.body.userId && req.body.userId !== req.user.id) {
-                return res.status(401).json({error: "Seul le titulaire peut effectuer cette action"});
+            if (req.baseUrl.includes('/admin') && req.baseUrl !== "/admin/signin" && req.user.roles && !req.user.roles.includes('ROLES_ALL_ADMIN')) {
+                return res.status(401).json({error: "Tu n'as pas les droits suffisant"});
             } else {
                 next();
             }

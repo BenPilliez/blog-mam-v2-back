@@ -60,7 +60,6 @@ module.exports = {
             return res.status(500).json({error: e})
         }
     },
-
     create_category: async (req, res) => {
         logger.debug("app => categoryController => create_category")
         try {
