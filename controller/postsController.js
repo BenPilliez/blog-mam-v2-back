@@ -15,7 +15,8 @@ module.exports = {
             const page = parseInt(req.query.page) || 0
             const offset = limit * page
 
-            const posts = await models.posts.findAndCountAll({
+            query = {
+                where: {},
                 include: [
                     {
                         model: models.category
@@ -26,7 +27,13 @@ module.exports = {
                 ],
                 limit: limit,
                 offset: offset
-            })
+            }
+
+            if (req.baseUrl.includes('/api')) {
+                query.where = {published: true}
+            }
+
+            const posts = await models.posts.findAndCountAll(query)
 
             if (posts.count === 0) {
                 return res.status(404).json("Aucun posts")
@@ -87,8 +94,8 @@ module.exports = {
 
 
             const post = await models.posts.create(body, {
-                    include: [models.rates],
-                })
+                include: [models.rates],
+            })
 
             return res.json(post)
 
@@ -102,7 +109,7 @@ module.exports = {
 
         try {
 
-            const post = await models.posts.findByPk(req.params.id)
+            let post = await models.posts.findByPk(req.params.id)
 
             if (!post) {
                 return res.status(404).json("Aucun post")
@@ -139,6 +146,28 @@ module.exports = {
 
         } catch (e) {
             logger.error(e)
+            return res.status(500).json({error: e})
+        }
+    },
+    update_published_value: async (req, res) => {
+        logger.debug('app => postsController => update_published_value ')
+
+        try {
+
+            let post = await models.posts.findByPk(req.params.id)
+
+            if (!post) {
+                return res.sendStatus(404)
+            }
+
+            post.update({
+                published: req.body.published
+            })
+
+            return res.json(post)
+
+        } catch (e) {
+            logger.error(e);
             return res.status(500).json({error: e})
         }
     }
