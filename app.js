@@ -14,6 +14,7 @@ const postAdminRouter = require('./routes/admin/postsRouter')
 const categoryApi = require('./routes/api/categoryRouter')
 const categoryAdmin = require('./routes/admin/categoryRouter')
 const authRouter = require('./routes/admin/authRouter')
+const rateRouter = require('./routes/api/rateRouter')
 
 
 // Pour o2switch panel
@@ -36,6 +37,7 @@ app.use('', indexRouter)
 //Routes api
 app.use('/api/posts', postApiRouter)
 app.use('/api/category', categoryApi)
+app.use('/api/rate', rateRouter)
 
 //Routes admin
 app.use('/admin/', authRouter)
