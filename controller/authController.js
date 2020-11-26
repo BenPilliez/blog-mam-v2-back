@@ -6,9 +6,31 @@ module.exports = {
     signup: async (req, res) => {
         logger.debug("app => authController => signup")
         try {
-
             const user = await models.users.create(req.body)
-            return res.json(user)
+
+            let token = jwt.sign(
+                {
+                    id: user.id,
+                    email: user.email,
+                    roles: user.ROLES
+                },
+                process.env.JWT_SECRET,
+                {
+                    expiresIn: '24h',
+                    audience: process.env.AUDIENCE,
+                    issuer: process.env.ISSUER
+                }
+            )
+
+            return res.status(200).json({
+                user:
+                    {
+                        id: user.id,
+                        email: user.email,
+                        avatar: user.avatar,
+                    },
+                token: token
+            });
 
         } catch (e) {
             logger.error(e)
@@ -32,9 +54,8 @@ module.exports = {
                 return res.status(401).json({error: "Utilisateur ou mot de passe incorrect"});
             }
 
-            if (!user.ROLES.includes('ROLES_ALL_ADMIN')) {
-                logger.error("Pas les droits")
-                return res.status(401).json({error: "Tu n'as pas accès à cette ressource"})
+            if(req.baseUrl.includes('/admin') && !user.ROLES.includes('ROLES_ALL_ADMIN')){
+                return res.status(401).json("Tu n'as pas les droits nécessaire ")
             }
 
             let password = user.validatePassword(req.body.password, user.password);

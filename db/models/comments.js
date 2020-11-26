@@ -15,8 +15,7 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "CASCADE",
 
       })
-      comments.hasMany(models.comments, {as:'Parent', foreignKey:'id'})
-      comments.belongsTo(models.comments, {as: 'Children', onDelete:"CASCADE"})
+      comments.hasMany(models.comments, {as:'Children', foreignKey:'commentsId', onDelete:'CASCADE'})
       comments.belongsTo(models.posts, {
         foreignKey: 'postsId',
         onDelete: "CASCADE"

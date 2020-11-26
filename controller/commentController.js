@@ -48,8 +48,8 @@ module.exports = {
             return res.json(comment)
 
         } catch (e) {
-            logger.debug("app => commentsController => posts_comments")
-            return res.statu(500).json({error: e})
+            logger.error(e)
+            return res.status(500).json({error: e})
         }
     },
 
@@ -57,17 +57,32 @@ module.exports = {
         logger.debug("app => commentsController => reply_comments")
 
         try {
-            const comment = await models.comments.create({
-                usersId: req.user.id,
-                postsId: req.body.postsId,
-                content: req.body.content,
-                commentsId: req.body.commentsId
+
+            const comment = await models.comments.findOne({
+                where:{
+                    id: req.body.commentsId
+                }
             })
 
-            return res.json(comment)
+            if(!comment){
+                return res.sendStatus(404)
+            }
+
+            const reply = await models.comments.create({
+                usersId: req.user.id,
+                postsId: comment.postsId,
+                content: req.body.content,
+                commentsId: comment.id,
+                published: comment.published
+            })
+
+            console.log(reply)
+
+            res.sendStatus(200)
+            /*return res.json(reply)*/
 
         } catch (e) {
-            logger.erro(e)
+            logger.error(e)
             return res.status(500).json({error: e})
         }
     },
@@ -105,7 +120,7 @@ module.exports = {
         try{
             const comment = await models.comments.findByPk(req.params.id)
             comment.update({
-                published: true
+                published: req.body.published
             })
 
             return res.json(comment)

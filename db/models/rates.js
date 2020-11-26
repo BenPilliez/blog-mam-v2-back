@@ -13,20 +13,16 @@ module.exports = (sequelize, DataTypes) => {
                 foreignKey: 'postsId',
                 onDelete: "CASCADE"
             })
+
+            rates.belongsTo(models.users, {
+                foreignKey: 'usersId',
+                onDelete: "CASCADE"
+            })
         }
     }
 
     rates.init({
-        nb_rates: {
-            type: DataTypes.INTEGER,
-        },
-        rate: DataTypes.FLOAT,
-        calculatedRate: {
-            type: DataTypes.VIRTUAL,
-            get() {
-                return this.getDataValue('rate') / this.getDataValue('nb_rates')
-            }
-        }
+        rate: DataTypes.FLOAT
     }, {
         sequelize,
         modelName: 'rates',

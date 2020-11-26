@@ -11,17 +11,25 @@ module.exports = {
       postsId:{
         type: Sequelize.INTEGER,
         allowNull: false,
+        onDelete: 'CASCADE',
         references:{
           model: 'posts',
           key: 'id',
           as: 'postsId'
         }
       },
+      usersId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        onDelete: 'CASCADE',
+        references:{
+          model: 'users',
+          key: 'id',
+          as : 'usersId'
+        }
+      },
       rate:{
         type: Sequelize.FLOAT
-      },
-      nb_rates: {
-        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,

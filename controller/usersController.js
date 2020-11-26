@@ -59,7 +59,7 @@ module.exports = {
               return res.sendStatus(404)
           }
 
-          user.update(req.body)
+          await user.update(req.body)
 
           return res.json({
               id: user.id,
@@ -90,7 +90,7 @@ module.exports = {
                 })
             }
 
-            user.update({
+            await user.update({
                 password: req.body.password
             })
 

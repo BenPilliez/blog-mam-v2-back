@@ -14,9 +14,12 @@ const postAdminRouter = require('./routes/admin/postsRouter')
 const categoryApiRouter = require('./routes/api/categoryRouter')
 const categoryAdminRouter = require('./routes/admin/categoryRouter')
 const authAdminRouter = require('./routes/admin/authRouter')
-const rateRouter = require('./routes/api/rateRouter')
-const commentsRouter = require('./routes/api/commentsRouter')
 const authApiRouter = require('./routes/api/authRouter')
+const rateApiRouter = require('./routes/api/rateRouter')
+const commentsApiRouter = require('./routes/api/commentsRouter')
+const commentsAdminRouter = require('./routes/admin/commentRouter')
+const usersApiRouter = require('./routes/api/usersRouter')
+const usersAdminRouter = require('./routes/admin/usersRouter')
 
 
 // Pour o2switch panel
@@ -37,16 +40,19 @@ app.use(cors())
 app.use('', indexRouter)
 
 //Routes api
+app.use('/api', authApiRouter)
 app.use('/api/posts', postApiRouter)
 app.use('/api/category', categoryApiRouter)
-app.use('/api/rate', rateRouter)
-app.use('/api/comments', commentsRouter)
-app.use('/api/', authApiRouter)
+app.use('/api/rate',verifToken, rateApiRouter)
+app.use('/api/comments',verifToken, commentsApiRouter)
+app.use('/api/users',verifToken, usersApiRouter)
 
 //Routes admin
-app.use('/admin/', authAdminRouter)
+app.use('/admin', authAdminRouter)
+app.use('/admin/users', verifToken, usersAdminRouter)
 app.use('/admin/posts', verifToken, multer, postAdminRouter)
 app.use('/admin/category', verifToken, categoryAdminRouter)
+app.use('/admin/comments', verifToken, commentsAdminRouter)
 
 // 404 Not found
 app.use(function (req, res, next) {

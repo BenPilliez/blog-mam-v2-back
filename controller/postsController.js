@@ -4,21 +4,22 @@ const {getPagingData} = require('../helpers/getPagingData')
 
 
 const DEFAUlT_PHOTOS = ['nature.jpg', 'foret.jpg', 'prairie.jpg']
+
 const INCLUDE = [
-        {
-            model: models.rates
+    {
+        model: models.category
+    },
+    {
+        model: models.comments,
+        where: {
+            commentsId: null
         },
-        {
-            model: models.category
-        },
-        {
-            model:models.comments,
-            include:{
-                model: models.comments,
-                as: 'Children'
-            }
+        include: {
+            model: models.comments,
+            as: 'Children'
         }
-        ]
+    }
+]
 
 
 module.exports = {
@@ -33,7 +34,7 @@ module.exports = {
 
             query = {
                 where: {},
-                include:INCLUDE,
+                include: INCLUDE,
                 limit: limit,
                 offset: offset
             }
@@ -96,15 +97,9 @@ module.exports = {
                 body['photos'] = DEFAUlT_PHOTOS
             }
 
-            body['rate'] = {
-                rate: 0,
-                nb_rates: 0
-            }
             body['usersId'] = req.user.id
 
-            const post = await models.posts.create(body, {
-                include: [{model: models.rates}],
-            })
+            const post = await models.posts.create(body)
 
             return res.json(post)
 
@@ -118,7 +113,7 @@ module.exports = {
 
         try {
 
-            const post = await models.posts.findByPk(req.params.id,{
+            const post = await models.posts.findByPk(req.params.id, {
                 include: INCLUDE
             })
 
@@ -161,7 +156,7 @@ module.exports = {
             return res.status(500).json({error: e})
         }
     },
-    update_published_value: async (req, res) => {
+    set_published: async (req, res) => {
         logger.debug('app => postsController => update_published_value ')
 
         try {

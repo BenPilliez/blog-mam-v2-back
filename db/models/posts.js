@@ -46,7 +46,7 @@ module.exports = (sequelize, DataTypes) => {
                 }
             }
         },
-        published: {type: DataTypes.BOOLEAN, defaultValue: true},
+        published: {type: DataTypes.BOOLEAN, defaultValue: false},
         createdAt: {
             type: DataTypes.DATE,
             allowNull: false,
