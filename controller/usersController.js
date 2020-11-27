@@ -1,13 +1,13 @@
 const models = require('../db/models')
 const logger = require('../helpers/logger')
+const {getPagingData} = require("../helpers/getPagingData");
 
 
 module.exports = {
 
     get_users: async (req, res) => {
-        logger.debugt("app => usersController => get_users")
+        logger.debug("app => usersController => get_users")
         try {
-
             const limit = parseInt(req.query.perPage) || 10
             const page = parseInt(req.query.page) || 0
             const offset = limit * page

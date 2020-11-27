@@ -47,10 +47,9 @@ module.exports = {
             logger.debug("admin routes")
             if (req.baseUrl.includes('/admin') && req.user.roles && !req.user.roles.includes('ROLES_ALL_ADMIN')) {
                 return res.status(401).json({error: "Tu n'as pas les droits suffisant"});
-            } else {
-                next();
             }
 
+            next();
         }catch (e) {
             logger.error(e)
             return res.status(500).json({error: e})
