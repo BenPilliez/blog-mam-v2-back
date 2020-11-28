@@ -13,7 +13,10 @@ module.exports = {
             const offset = limit * page
 
             const users = await models.users.findAndCountAll({
-                limit: limit, offset: offset
+                limit: limit, offset: offset,
+                attributes: {
+                    exclude: ['password']
+                }
             })
 
             if (users.count === 0) {
