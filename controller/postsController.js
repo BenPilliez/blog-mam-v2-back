@@ -11,13 +11,14 @@ const INCLUDE = [
     },
     {
         model: models.comments,
-        where: {
+        where:{
             commentsId: null
         },
         include: {
             model: models.comments,
             as: 'Children'
-        }
+        },
+        required: false
     }
 ]
 
@@ -36,7 +37,8 @@ module.exports = {
                 where: {},
                 include: INCLUDE,
                 limit: limit,
-                offset: offset
+                offset: offset,
+                distinct:true
             }
 
             if (req.baseUrl.includes('/api')) {
@@ -44,10 +46,6 @@ module.exports = {
             }
 
             const posts = await models.posts.findAndCountAll(query)
-
-            if (posts.count === 0) {
-                return res.status(404).json("Aucun posts")
-            }
 
             const postsData = getPagingData(posts, page, limit)
 
