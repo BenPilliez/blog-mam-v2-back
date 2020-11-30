@@ -32,7 +32,7 @@ const app = express()
 
 // Middleware
 app.use(express.urlencoded({extended: true}))
-app.use('/api/static', express.static(path.join(__dirname, 'public')))
+app.use('/static', express.static(path.join(__dirname, 'public')))
 app.use(express.json())
 app.use(cors())
 
