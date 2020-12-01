@@ -16,7 +16,8 @@ module.exports = {
                 limit: limit, offset: offset,
                 attributes: {
                     exclude: ['password']
-                }
+                },
+                order: [req.query.order]
             })
 
             if (users.count === 0) {
