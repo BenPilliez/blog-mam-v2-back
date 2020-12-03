@@ -53,33 +53,53 @@ module.exports = {
             return res.status(500).json({error: e})
         }
     },
-    update_user: async (req,res) => {
-      logger.debug("app => usersController => update_user")
+    create_user_admin: async (req, res) => {
+        logger.debug("app => usersController => create_user")
+        try {
 
-      try{
-          let user = await models.users.findByPk(req.params.id)
+            const body = req.body
+            body['avatar'] = req.files['avatar'] && req.files['avatar'].length > 0 ? req.files['avatar'][0].filename : null
 
-          const body = req.body
-          body['avatar'] = req.files['avatar'] && req.files['avatar'].length > 0 ? req.files['avatar'][0].filename  : user.avatar
+            const user = await models.users.create(body)
 
-          if(!user){
-              return res.sendStatus(404)
-          }
+            return res.json({
+                id: user.id,
+                email: user.email,
+                ROLES: user.ROLES
+            })
 
-          await user.update(body)
-
-          return res.json({
-              id: user.id,
-              email: user.email,
-              ROLES:user.ROLES
-          })
-
-      }catch (e){
-          logger.error(e)
-          return res.status(500).json({error: e})
-      }
+        } catch (e) {
+            logger.error(e)
+            return res.status(500).json({error: e})
+        }
     },
-    update_user_password: async (req,res) => {
+    update_user: async (req, res) => {
+        logger.debug("app => usersController => update_user")
+
+        try {
+            let user = await models.users.findByPk(req.params.id)
+
+            const body = req.body
+            body['avatar'] = req.files['avatar'] && req.files['avatar'].length > 0 ? req.files['avatar'][0].filename : user.avatar
+
+            if (!user) {
+                return res.sendStatus(404)
+            }
+
+            await user.update(body)
+
+            return res.json({
+                id: user.id,
+                email: user.email,
+                ROLES: user.ROLES
+            })
+
+        } catch (e) {
+            logger.error(e)
+            return res.status(500).json({error: e})
+        }
+    },
+    update_user_password: async (req, res) => {
         logger.debug("app => usersController => update_user_password")
         try {
 
@@ -109,12 +129,12 @@ module.exports = {
             return res.status(500).json({error: e})
         }
     },
-     delete_user : async(req,res) => {
+    delete_user: async (req, res) => {
         logger.debug("app => usersController => delete_user")
 
-        try{
+        try {
             const user = await models.users.findByPk(req.params.id)
-            if(!user){
+            if (!user) {
                 return res.sendStatus(404)
             }
 
@@ -122,10 +142,10 @@ module.exports = {
 
             return res.sendStatus(200)
 
-        }catch (e) {
+        } catch (e) {
             logger.error(e)
             return res.status(500).json({error: e})
         }
-     }
+    }
 
 }
