@@ -59,12 +59,13 @@ module.exports = (sequelize, DataTypes) => {
         },
         ROLES: {
             type: DataTypes.STRING,
-            defaultValue: "ROLE_USER",
+            defaultValue:"ROLE_USER",
             get() {
                 return this.getDataValue('ROLES').split(",")
             },
             set(value) {
-                return this.setDataValue('ROLES', value.join(','))
+                const roles = typeof value === "string" ? value : value.join(',')
+                return this.setDataValue('ROLES', roles)
             }
         },
         avatar: {

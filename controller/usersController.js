@@ -59,15 +59,19 @@ module.exports = {
       try{
           let user = await models.users.findByPk(req.params.id)
 
+          const body = req.body
+          body['avatar'] = req.files['avatar'] && req.files['avatar'].length > 0 ? req.files['avatar'][0].filename  : user.avatar
+
           if(!user){
               return res.sendStatus(404)
           }
 
-          await user.update(req.body)
+          await user.update(body)
 
           return res.json({
               id: user.id,
               email: user.email,
+              ROLES:user.ROLES
           })
 
       }catch (e){

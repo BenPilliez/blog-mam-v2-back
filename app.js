@@ -49,7 +49,7 @@ app.use('/api/users',verifToken, usersApiRouter)
 
 //Routes admin
 app.use('/admin', authAdminRouter)
-app.use('/admin/users', verifToken, usersAdminRouter)
+app.use('/admin/users', verifToken,multer, usersAdminRouter)
 app.use('/admin/posts', verifToken, multer, postAdminRouter)
 app.use('/admin/category', verifToken, categoryAdminRouter)
 app.use('/admin/comments', verifToken, commentsAdminRouter)
