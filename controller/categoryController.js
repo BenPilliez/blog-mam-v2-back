@@ -94,13 +94,12 @@ module.exports = {
         logger.debug("app => categoryController => delete_category")
         try {
 
-            const category = await models.category.findByPk(req.params.id)
 
-            if (!category) {
-                return res.sendStatus(404)
-            }
-
-            category.destroy()
+            await models.category.destroy({
+                where:{
+                    id: req.body.id
+                }
+            })
             return res.sendStatus(200)
 
         } catch (e) {

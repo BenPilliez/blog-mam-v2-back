@@ -57,8 +57,8 @@ module.exports = {
         logger.debug("app => usersController => create_user")
         try {
 
-            const body = req.body
-            body['avatar'] = req.files['avatar'] && req.files['avatar'].length > 0 ? req.files['avatar'][0].filename : null
+            let body = req.body
+            body['avatar'] = req.files['avatar'] && req.files['avatar'].length > 0 ? req.files['avatar'][0].filename : 'user.jpg'
 
             const user = await models.users.create(body)
 
@@ -79,7 +79,7 @@ module.exports = {
         try {
             let user = await models.users.findByPk(req.params.id)
 
-            const body = req.body
+            let body = req.body
             body['avatar'] = req.files['avatar'] && req.files['avatar'].length > 0 ? req.files['avatar'][0].filename : user.avatar
 
             if (!user) {
@@ -133,12 +133,12 @@ module.exports = {
         logger.debug("app => usersController => delete_user")
 
         try {
-            const user = await models.users.findByPk(req.params.id)
-            if (!user) {
-                return res.sendStatus(404)
-            }
 
-            await users.destroy()
+            await models.users.destroy({
+                where:{
+                    id: req.body.id
+                }
+            })
 
             return res.sendStatus(200)
 

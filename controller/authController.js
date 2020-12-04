@@ -6,6 +6,8 @@ module.exports = {
     signup: async (req, res) => {
         logger.debug("app => authController => signup")
         try {
+            let body = req.body
+            body['avatar'] = 'user.jpg'
             const user = await models.users.create(req.body)
 
             let token = jwt.sign(
