@@ -2,16 +2,21 @@ const logger = require('../helpers/logger')
 const models = require('../db/models')
 const {getPagingData} = require('../helpers/getPagingData')
 
-
 const DEFAUlT_PHOTOS = ['nature.jpg', 'foret.jpg', 'prairie.jpg']
 
 const INCLUDE = [
+    {
+        model: models.users,
+        attributes: {
+            exclude: ['password']
+        }
+    },
     {
         model: models.category
     },
     {
         model: models.comments,
-        where:{
+        where: {
             commentsId: null
         },
         include: {
@@ -38,7 +43,8 @@ module.exports = {
                 include: INCLUDE,
                 limit: limit,
                 offset: offset,
-                distinct:true
+                distinct: true,
+                order: [req.query.order]
             }
 
             if (req.baseUrl.includes('/api')) {

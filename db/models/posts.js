@@ -1,6 +1,8 @@
 'use strict';
 const {Model} = require('sequelize')
 const SequelizeSlugify = require('sequelize-slugify')
+const moment = require('moment');
+require('moment/locale/fr')
 
 module.exports = (sequelize, DataTypes) => {
     class posts extends Model {
@@ -50,7 +52,10 @@ module.exports = (sequelize, DataTypes) => {
         createdAt: {
             type: DataTypes.DATE,
             allowNull: false,
-            defaultValue: sequelize.NOW
+            defaultValue: sequelize.NOW,
+            get(){
+                return moment(this.getDataValue('createdAt')).format('LL')
+            }
         },
         updatedAt: {
             type: DataTypes.DATE,

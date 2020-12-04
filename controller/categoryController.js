@@ -8,14 +8,19 @@ module.exports = {
         logger.debug("app => categoryController => get_category")
         try {
 
+            let query = {order: [req.query.order]};
+
+
             const limit = parseInt(req.query.perPage) || 10
             const page = parseInt(req.query.page) || 0
             const offset = limit * page
 
-            const categories = await models.category.findAndCountAll({
-                limit: limit,
-                offset: offset
-            })
+            if (req.query.perPage && req.query.page) {
+                query['limit'] = limit;
+                query['offset'] = offset
+            }
+
+            const categories = await models.category.findAndCountAll(query)
 
             if (categories.count === 0) {
                 return res.status(404).json("Aucune catégorie")
@@ -96,7 +101,7 @@ module.exports = {
 
 
             await models.category.destroy({
-                where:{
+                where: {
                     id: req.body.id
                 }
             })
