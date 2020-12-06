@@ -151,7 +151,6 @@ module.exports = {
             if (!post) {
                 return res.sendStatus(404)
             }
-
             await post.destroy()
             return res.sendStatus(200)
 

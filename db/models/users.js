@@ -2,7 +2,8 @@
 const {Model} = require('sequelize')
 const bcrypt = require('bcrypt')
 const logger = require('../../helpers/logger')
-
+const moment = require('moment')
+require('moment/locale/fr')
 module.exports = (sequelize, DataTypes) => {
     class users extends Model {
         /**
@@ -45,6 +46,21 @@ module.exports = (sequelize, DataTypes) => {
                 }
             }
         },
+        username: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            unique: {
+                msg: 'Pseudonyme déjà utilisé'
+            },
+            validate: {
+                notEmpty: {
+                    msg: 'Allez on rempli le formulaire correctement, il me faut un pseudo'
+                },
+                notNull: {
+                    msg: 'Allez on rempli le formulaire correctement, il me faut un pseudo'
+                }
+            }
+        },
         password: {
             type: DataTypes.STRING,
             allowNull: false,
@@ -59,7 +75,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         ROLES: {
             type: DataTypes.STRING,
-            defaultValue:"ROLE_USER",
+            defaultValue: "ROLE_USER",
             get() {
                 return this.getDataValue('ROLES').split(",")
             },
@@ -75,7 +91,10 @@ module.exports = (sequelize, DataTypes) => {
         createdAt: {
             type: DataTypes.DATE,
             allowNull: false,
-            defaultValue: sequelize.NOW
+            defaultValue: sequelize.NOW,
+            get() {
+                return moment(this.getDataValue('createdAt')).format('LL')
+            }
         },
         updatedAt: {
             type: DataTypes.DATE,
@@ -98,7 +117,7 @@ module.exports = (sequelize, DataTypes) => {
         modelName: 'users',
     });
 
-    users.prototype.validatePassword = function (password){
+    users.prototype.validatePassword = function (password) {
         try {
             return bcrypt.compareSync(password, this.password)
         } catch (e) {
