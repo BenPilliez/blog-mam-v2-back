@@ -54,6 +54,10 @@ module.exports = {
 
             const posts = await models.posts.findAndCountAll(query)
 
+            if(posts.count === 0){
+                return res.sendStatus(404)
+            }
+
             const postsData = getPagingData(posts, page, limit)
 
             return res.json(postsData)
