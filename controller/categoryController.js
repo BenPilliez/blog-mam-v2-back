@@ -8,15 +8,13 @@ module.exports = {
         logger.debug("app => categoryController => get_category")
         try {
 
-            let query = {order: [req.query.order]};
-
-
+            let query = {order: [req.query.order || ['name', 'ASC']]}
             const limit = parseInt(req.query.perPage) || 10
             const page = parseInt(req.query.page) || 0
             const offset = limit * page
 
             if (req.query.perPage && req.query.page) {
-                query['limit'] = limit;
+                query['limit'] = limit
                 query['offset'] = offset
             }
 

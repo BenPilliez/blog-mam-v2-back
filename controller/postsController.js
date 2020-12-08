@@ -44,8 +44,9 @@ module.exports = {
                 limit: limit,
                 offset: offset,
                 distinct: true,
-                order: [req.query.order]
+                order: [req.query.order || ['title', 'ASC']]
             }
+
 
             if (req.baseUrl.includes('/api')) {
                 query.where = {published: true}
@@ -90,13 +91,13 @@ module.exports = {
         try {
             const body = req.body
 
-            if (req.files && req.files.length > 0) {
+            if (req.files.photos && req.files.photos.length > 0) {
 
-                body['photos'] = post.photos
-
-                req.files.map((file) => {
+                body['photos'] = []
+                req.files.photos.map((file) => {
                     body['photos'] = [...body['photos'], file.filename]
                 })
+
             } else {
                 body['photos'] = DEFAUlT_PHOTOS
             }
@@ -128,9 +129,9 @@ module.exports = {
             const body = req.body
             body['photos'] = post.photos
 
+            if (req.files.photos && req.files.photos.length > 0) {
 
-            if (req.files && req.files.length > 0) {
-                req.files.map((file) => {
+                req.files.photos.map((file) => {
                     body['photos'] = [...body['photos'], file.filename]
                 })
             }

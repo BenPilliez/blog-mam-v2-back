@@ -1,4 +1,6 @@
 'use strict';
+const moment = require('moment')
+require('moment/locale/fr')
 const {
   Model
 } = require('sequelize');
@@ -28,7 +30,10 @@ module.exports = (sequelize, DataTypes) => {
     createdAt: {
       allowNull: false,
       type: DataTypes.DATE,
-      defaultValue: sequelize.now
+      defaultValue: sequelize.now,
+      get() {
+        return moment(this.getDataValue('createdAt')).format('LL')
+      }
     },
     updatedAt: {
       allowNull: false,

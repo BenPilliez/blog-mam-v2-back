@@ -13,13 +13,25 @@ module.exports = {
             const page = parseInt(req.query.page) || 0
             const offset = limit * page
 
-            const comments = await models.comments.findAndCountAll({
-                where: {
-                    postsId: req.body.postsId
-                },
+            query = {
+                where: {},
+                include:[{
+                    model: models.users,
+                    attributes: {
+                        exclude: ['password','avatar','ROLES','createdAt','updatedAt']
+                    },
+                }],
                 limit: limit,
-                offset: offset
-            })
+                offset: offset,
+                distinct: true,
+                order: [req.query.order || ['id', 'ASC']]
+            }
+
+            if (req.baseUrl.includes('/api')) {
+                query.where = {postsId: req.body.postsId}
+            }
+
+            const comments = await models.comments.findAndCountAll(query)
 
             if (comments.count === 0) {
                 return res.sendStatus(404)
