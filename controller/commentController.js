@@ -18,7 +18,7 @@ module.exports = {
                 include:[{
                     model: models.users,
                     attributes: {
-                        exclude: ['password','avatar','ROLES','createdAt','updatedAt']
+                        exclude: ['password','ROLES','createdAt','updatedAt']
                     },
                 }],
                 limit: limit,
@@ -144,13 +144,12 @@ module.exports = {
     delete_comment: async(req,res)=> {
         logger.debug("app => commentsController => delete_comment")
         try{
-            const comment = await models.comments.findByPk(req.params.id)
 
-            if(!comment){
-                return res.sendStatus(404)
-            }
-
-            await comment.destroy()
+            await models.comments.destroy({
+                where: {
+                    id: req.body.id
+                }
+            })
 
             return res.sendStatus(200)
 
