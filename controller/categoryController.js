@@ -37,17 +37,9 @@ module.exports = {
         logger.debug('app => categoryController => get_details_category')
         try {
 
-            const include = req.query.include
             const query = {
                 where: {slug: req.params.slug},
-                include: null
-            }
-            if (include) {
-                query.include = [
-                    {
-                        model: models.posts
-                    }
-                ]
+                include: models.posts
             }
 
             const category = await models.category.findOne(query)
