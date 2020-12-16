@@ -58,7 +58,7 @@ module.exports = {
                 return res.sendStatus(404)
             }
 
-            const postsData = getPagingData(posts, page, limit)
+            const postsData = await getPagingData(posts, page, limit)
 
             return res.json(postsData)
 

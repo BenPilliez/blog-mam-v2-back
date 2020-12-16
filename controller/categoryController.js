@@ -39,7 +39,7 @@ module.exports = {
 
             const query = {
                 where: {slug: req.params.slug},
-                include: models.posts
+                include: {model: models.posts}
             }
 
             const category = await models.category.findOne(query)
