@@ -10,7 +10,8 @@
     "db:init": "sequelize-cli init",
     "db:create": "sequelize db:create && sequelize db:migrate && sequelize db:seed:all",
     "dev": "nodemon app.js",
-    "start": "node app.js"
+    "start": "node app.js",
+    "test": "mocha"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.2",
