@@ -1,53 +1,53 @@
-const models = require('../db/models')
-const logger = require('../helpers/logger')
-const {getPagingData} = require('../helpers/getPagingData')
+const models = require("../db/models");
+const logger = require("../helpers/logger");
+const {getPagingData} = require("../helpers/getPagingData");
 
 
 module.exports = {
 
     get_comments: async (req, res) => {
-        logger.debug("app => commentController => get_comments")
+        logger.debug("app => commentController => get_comments");
         try {
 
-            const limit = parseInt(req.query.perPage) || 10
-            const page = parseInt(req.query.page) || 0
-            const offset = limit * page
+            const limit = parseInt(req.query.perPage) || 10;
+            const page = parseInt(req.query.page) || 0;
+            const offset = limit * page;
 
             query = {
                 where: {},
-                include:[{
+                include: [{
                     model: models.users,
                     attributes: {
-                        exclude: ['password','ROLES','createdAt','updatedAt']
+                        exclude: ["password", "ROLES", "createdAt", "updatedAt"]
                     },
                 }],
                 limit: limit,
                 offset: offset,
                 distinct: true,
-                order: [req.query.order || ['id', 'ASC']]
+                order: [req.query.order || ["id", "ASC"]]
+            };
+
+            if (req.baseUrl.includes("/api")) {
+                query.where = {postsId: req.body.postsId};
             }
 
-            if (req.baseUrl.includes('/api')) {
-                query.where = {postsId: req.body.postsId}
-            }
-
-            const comments = await models.comments.findAndCountAll(query)
+            const comments = await models.comments.findAndCountAll(query);
 
             if (comments.count === 0) {
-                return res.sendStatus(404)
+                return res.sendStatus(404);
             }
 
-            const commentsData = getPagingData(comments, page, limit)
+            const commentsData = getPagingData(comments, page, limit);
 
-            return res.json(commentsData)
+            return res.json(commentsData);
 
         } catch (e) {
-            logger.error(e)
-            return res.status(500).json({error: e})
+            logger.error(e);
+            return res.status(500).json({error: e});
         }
     },
     post_comments: async (req, res) => {
-        logger.debug("app => commentsController => posts_comments")
+        logger.debug("app => commentsController => posts_comments");
 
         try {
 
@@ -55,29 +55,29 @@ module.exports = {
                 usersId: req.user.id,
                 postsId: req.body.postsId,
                 content: req.body.content
-            })
+            });
 
-            return res.json(comment)
+            return res.json(comment);
 
         } catch (e) {
-            logger.error(e)
-            return res.status(500).json({error: e})
+            logger.error(e);
+            return res.status(500).json({error: e});
         }
     },
 
     reply_comments: async (req, res) => {
-        logger.debug("app => commentsController => reply_comments")
+        logger.debug("app => commentsController => reply_comments");
 
         try {
 
             const comment = await models.comments.findOne({
-                where:{
+                where: {
                     id: req.body.commentsId
                 }
-            })
+            });
 
-            if(!comment){
-                return res.sendStatus(404)
+            if (!comment) {
+                return res.sendStatus(404);
             }
 
             const reply = await models.comments.create({
@@ -86,21 +86,21 @@ module.exports = {
                 content: req.body.content,
                 commentsId: comment.id,
                 published: comment.published
-            })
+            });
 
-            console.log(reply)
+            console.log(reply);
 
-            res.sendStatus(200)
+            res.sendStatus(200);
             /*return res.json(reply)*/
 
         } catch (e) {
-            logger.error(e)
-            return res.status(500).json({error: e})
+            logger.error(e);
+            return res.status(500).json({error: e});
         }
     },
 
     update_comment: async (req, res) => {
-        logger.debug('app => commentsController => update_comment')
+        logger.debug("app => commentsController => update_comment");
 
         try {
 
@@ -111,52 +111,52 @@ module.exports = {
                     },
                     include: {
                         model: models.comments,
-                        as: 'Children'
+                        as: "Children"
                     }
                 }
-            )
+            );
             if (!comment) {
-                return res.sendStatus(404)
+                return res.sendStatus(404);
             }
 
-            comment.update(req.body)
-            return res.json(comment)
+            comment.update(req.body);
+            return res.json(comment);
         } catch (e) {
-            logger.error(e)
-            return res.status(500).json({error: e})
+            logger.error(e);
+            return res.status(500).json({error: e});
         }
     },
-    set_published: async (req,res) => {
-        logger.debug('app => commentsController => set_published')
+    set_published: async (req, res) => {
+        logger.debug("app => commentsController => set_published");
 
-        try{
-            const comment = await models.comments.findByPk(req.params.id)
+        try {
+            const comment = await models.comments.findByPk(req.params.id);
             comment.update({
                 published: req.body.published
-            })
+            });
 
-            return res.json(comment)
-        }catch (e) {
-            logger.error(e)
-            return res.status(500).json({error: e})
+            return res.json(comment);
+        } catch (e) {
+            logger.error(e);
+            return res.status(500).json({error: e});
         }
     },
-    delete_comment: async(req,res)=> {
-        logger.debug("app => commentsController => delete_comment")
-        try{
+    delete_comment: async (req, res) => {
+        logger.debug("app => commentsController => delete_comment");
+        try {
 
             await models.comments.destroy({
                 where: {
                     id: req.body.id
                 }
-            })
+            });
 
-            return res.sendStatus(200)
+            return res.sendStatus(200);
 
-        }catch(e){
-            logger.error(e)
-            return res.status(500).json({error: e})
+        } catch (e) {
+            logger.error(e);
+            return res.status(500).json({error: e});
         }
     }
 
-}
+};

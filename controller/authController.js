@@ -1,14 +1,20 @@
-const logger = require('../helpers/logger')
-const jwt = require('jsonwebtoken')
-const models = require('../db/models')
+const logger = require("../helpers/logger");
+const jwt = require("jsonwebtoken");
+const models = require("../db/models");
+const {isEmpty, checkProperty} = require("../helpers/checkBody");
+
 
 module.exports = {
     signup: async (req, res) => {
-        logger.debug("app => authController => signup")
+        logger.debug("app => authController => signup");
         try {
-            let body = req.body
-            body['avatar'] = 'user.jpg'
-            const user = await models.users.create(req.body)
+            let body = req.body;
+
+            if (isEmpty(body) && checkProperty(body, "email, password, username")) {
+                return res.status(400).json({error: "Les champs ne peuvent être vide"});
+            }
+            body["avatar"] = "user.jpg";
+            const user = await models.users.create(req.body);
 
             let token = jwt.sign(
                 {
@@ -18,11 +24,11 @@ module.exports = {
                 },
                 process.env.JWT_SECRET,
                 {
-                    expiresIn: '24h',
+                    expiresIn: "24h",
                     audience: process.env.AUDIENCE,
                     issuer: process.env.ISSUER
                 }
-            )
+            );
 
             return res.status(200).json({
                 user:
@@ -35,8 +41,8 @@ module.exports = {
             });
 
         } catch (e) {
-            logger.error(e)
-            return res.status(500).json({error: e})
+            logger.error(e);
+            return res.status(500).json({error: e});
         }
     },
     signin: async (req, res) => {
@@ -48,22 +54,22 @@ module.exports = {
                 where: {
                     email: req.body.email
                 },
-                attributes: ['id', 'email', 'password', 'avatar', 'ROLES']
+                attributes: ["id", "email", "password", "avatar", "ROLES"]
             });
 
             if (!user) {
-                logger.debug("User incorrect")
+                logger.debug("User incorrect");
                 return res.status(401).json({error: "Utilisateur ou mot de passe incorrect"});
             }
 
-            if(req.baseUrl.includes('/admin') && !user.ROLES.includes('ROLES_ALL_ADMIN')){
-                return res.status(401).json("Tu n'as pas les droits nécessaire ")
+            if (req.baseUrl.includes("/admin") && !user.ROLES.includes("ROLES_ALL_ADMIN")) {
+                return res.status(401).json("Tu n'as pas les droits nécessaire ");
             }
 
             let password = user.validatePassword(req.body.password, user.password);
 
             if (!password) {
-                logger.debug("Password incorrect")
+                logger.debug("Password incorrect");
                 return res.status(401).json({error: "Utilisateur ou mot de passe incorrect"});
             }
 
@@ -75,11 +81,11 @@ module.exports = {
                 },
                 process.env.JWT_SECRET,
                 {
-                    expiresIn: '24h',
+                    expiresIn: "24h",
                     audience: process.env.AUDIENCE,
                     issuer: process.env.ISSUER
                 }
-            )
+            );
 
             return res.status(200).json({
                 user:
@@ -96,4 +102,4 @@ module.exports = {
             return res.status(500).json({error: e});
         }
     }
-}
+};
