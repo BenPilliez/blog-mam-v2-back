@@ -51,7 +51,7 @@ describe("checkBody ", () => {
                 const body = {username: "test"};
                 const property = "password";
                 const res = checkProperty(body, property);
-                expect(res).to.be.a("array");
+                expect(res).to.be.equal(true);
             });
         });
     });

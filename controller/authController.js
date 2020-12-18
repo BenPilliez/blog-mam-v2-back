@@ -50,6 +50,10 @@ module.exports = {
 
         try {
 
+            if (isEmpty(req.body) && checkProperty(email)) {
+                return res.status(400).json({error: "Les champs ne peuvent être vide"});
+            }
+
             let user = await models.users.findOne({
                 where: {
                     email: req.body.email
