@@ -15,7 +15,6 @@ const categoryApiRouter = require("./routes/api/categoryRouter");
 const categoryAdminRouter = require("./routes/admin/categoryRouter");
 const authAdminRouter = require("./routes/admin/authRouter");
 const authApiRouter = require("./routes/api/authRouter");
-const rateApiRouter = require("./routes/api/rateRouter");
 const commentsApiRouter = require("./routes/api/commentsRouter");
 const commentsAdminRouter = require("./routes/admin/commentRouter");
 const usersApiRouter = require("./routes/api/usersRouter");
@@ -43,7 +42,6 @@ app.use("", indexRouter);
 app.use("/api", authApiRouter);
 app.use("/api/posts", postApiRouter);
 app.use("/api/category", categoryApiRouter);
-app.use("/api/rate", verifToken, rateApiRouter);
 app.use("/api/comments", verifToken, commentsApiRouter);
 app.use("/api/users", verifToken, usersApiRouter);
 

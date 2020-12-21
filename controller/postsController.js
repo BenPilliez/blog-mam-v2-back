@@ -28,6 +28,16 @@ const INCLUDE = [
         }, {
             model: models.comments,
             as: "Children",
+            where: {
+                published: true
+            },
+            required: false,
+            include: {
+                model: models.users,
+                attributes: {
+                    exclude: ["password"]
+                }
+            }
         }],
         required: false
     }

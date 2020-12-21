@@ -85,13 +85,10 @@ module.exports = {
                 postsId: comment.postsId,
                 content: req.body.content,
                 commentsId: comment.id,
-                published: comment.published
+                published: false
             });
 
-            console.log(reply);
-
             res.sendStatus(200);
-            /*return res.json(reply)*/
 
         } catch (e) {
             logger.error(e);
