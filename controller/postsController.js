@@ -17,12 +17,18 @@ const INCLUDE = [
     {
         model: models.comments,
         where: {
-            commentsId: null
+            commentsId: null,
+            published: true,
         },
-        include: {
+        include: [{
+            model: models.users,
+            attributes: {
+                exclude: ["password"]
+            }
+        }, {
             model: models.comments,
-            as: "Children"
-        },
+            as: "Children",
+        }],
         required: false
     }
 ];
@@ -71,6 +77,8 @@ module.exports = {
         logger.debug("app => postsController => get_details_posts");
 
         try {
+
+            console.log(INCLUDE);
 
             const post = await models.posts.findOne({
                 where: {
