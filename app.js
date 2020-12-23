@@ -43,7 +43,7 @@ app.use("/api", authApiRouter);
 app.use("/api/posts", postApiRouter);
 app.use("/api/category", categoryApiRouter);
 app.use("/api/comments", verifToken, commentsApiRouter);
-app.use("/api/users", verifToken, usersApiRouter);
+app.use("/api/users", verifToken,multer, usersApiRouter);
 
 //Routes admin
 app.use("/admin", authAdminRouter);

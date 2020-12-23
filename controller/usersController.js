@@ -80,7 +80,7 @@ module.exports = {
             let user = await models.users.findByPk(req.params.id);
 
             let body = req.body;
-            body["avatar"] = req.files["avatar"] && req.files["avatar"].length > 0 ? req.files["avatar"][0].filename : user.avatar;
+            body["avatar"] = req.files && req.files["avatar"] && req.files["avatar"].length > 0 ? req.files["avatar"][0].filename : user.avatar;
 
             if (!user) {
                 return res.sendStatus(404);
@@ -90,6 +90,7 @@ module.exports = {
 
             return res.json({
                 id: user.id,
+                avatar: user.avatar,
                 email: user.email,
                 ROLES: user.ROLES
             });

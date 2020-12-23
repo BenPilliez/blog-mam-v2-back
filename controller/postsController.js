@@ -98,7 +98,7 @@ module.exports = {
             });
 
             if (!post) {
-                return res.status(404).json("Aucun post");
+                return res.status(404).json({error: "Aucun post"});
             }
 
             return res.json(post);
