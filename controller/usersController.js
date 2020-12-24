@@ -114,7 +114,7 @@ module.exports = {
 
             if (!valid) {
                 console.error("Ancien mot de passe correspond pas");
-                return res.status(404).json({
+                return res.status(400).json({
                     error: "L'ancien mot de passe ne correspond pas"
                 });
             }
