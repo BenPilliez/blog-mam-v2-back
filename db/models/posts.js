@@ -1,8 +1,8 @@
-'use strict';
-const {Model} = require('sequelize')
-const SequelizeSlugify = require('sequelize-slugify')
-const moment = require('moment');
-require('moment/locale/fr')
+"use strict";
+const {Model} = require("sequelize");
+const SequelizeSlugify = require("sequelize-slugify");
+const moment = require("moment");
+require("moment/locale/fr");
 
 module.exports = (sequelize, DataTypes) => {
     class posts extends Model {
@@ -14,22 +14,18 @@ module.exports = (sequelize, DataTypes) => {
         static associate(models) {
             // define association here
             posts.belongsTo(models.category, {
-                foreignKey: 'categoryId',
+                foreignKey: "categoryId",
                 onDelete: "CASCADE"
-            })
+            });
 
             posts.belongsTo(models.users, {
-                foreignKey: 'usersId',
+                foreignKey: "usersId",
                 onDelete: "CASCADE"
-            })
+            });
 
             posts.hasMany(models.comments, {
-                foreignKey: 'postsId'
-            })
-
-            posts.hasOne(models.rates, {
-                foreignKey: 'postsId',
-            })
+                foreignKey: "postsId"
+            });
         }
     }
 
@@ -40,11 +36,11 @@ module.exports = (sequelize, DataTypes) => {
         photos: {
             type: DataTypes.TEXT, allowNull: true,
             set(value) {
-                return this.setDataValue('photos', value.join(','))
+                return this.setDataValue("photos", value.join(","));
             },
             get() {
-                if (this.getDataValue('photos')) {
-                    return this.getDataValue('photos').split(",");
+                if (this.getDataValue("photos")) {
+                    return this.getDataValue("photos").split(",");
                 }
             }
         },
@@ -53,8 +49,8 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.DATE,
             allowNull: false,
             defaultValue: sequelize.NOW,
-            get(){
-                return moment(this.getDataValue('createdAt')).format('LL')
+            get() {
+                return moment(this.getDataValue("createdAt")).format("LL");
             }
         },
         updatedAt: {
@@ -64,12 +60,12 @@ module.exports = (sequelize, DataTypes) => {
         }
     }, {
         sequelize,
-        modelName: 'posts',
-    })
+        modelName: "posts",
+    });
 
     SequelizeSlugify.slugifyModel(posts, {
-        source: ['title']
-    })
+        source: ["title"]
+    });
 
-    return posts
+    return posts;
 };
