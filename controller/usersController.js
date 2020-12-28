@@ -110,6 +110,14 @@ module.exports = {
                 return res.status(404).json({error: "Aucun utilisateur"});
             }
 
+            if (Object.keys(req.body).length === 0) {
+                return res.status(400).json({error: "Le formulaire ne peut être vide"});
+            }
+
+            if (typeof req.body.oldPassword === "undefined") {
+                return res.status(400).json({error: "Il me faut l'ancien mot de passe"});
+            }
+
             let valid = await user.validatePassword(req.body.oldPassword);
 
             if (!valid) {
@@ -119,11 +127,15 @@ module.exports = {
                 });
             }
 
+            if (typeof req.body.password === "undefined") {
+                return res.status(400).json({error: "Il me faut un nouveau mot de passe"});
+            }
             await user.update({
                 password: req.body.password
             });
 
             return res.sendStatus(200);
+
 
         } catch (e) {
             console.error(e);
