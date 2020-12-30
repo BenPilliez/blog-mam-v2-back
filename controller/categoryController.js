@@ -45,7 +45,10 @@ module.exports = {
             if (include) {
                 query.include = [
                     {
-                        model: models.posts
+                        model: models.posts,
+                        where: {
+                            published: true
+                        }
                     }
                 ];
             }
