@@ -7,7 +7,6 @@ const resizeImages = async (req, res, next) => {
     try {
         if (!req.files) return next();
         req.body.photos = [];
-        console.log(req.files.photos);
         await Promise.all(
             req.files.photos.map(async file => {
                 const id = await uuid();
