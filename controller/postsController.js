@@ -113,14 +113,7 @@ module.exports = {
         try {
             const body = req.body;
 
-            if (req.files.photos && req.files.photos.length > 0) {
-
-                body["photos"] = [];
-                req.files.photos.map((file) => {
-                    body["photos"] = [...body["photos"], file.filename];
-                });
-
-            } else {
+            if (req.body.photos.length === 0) {
                 body["photos"] = DEFAUlT_PHOTOS;
             }
 
@@ -151,10 +144,10 @@ module.exports = {
             const body = req.body;
             body["photos"] = post.photos;
 
-            if (req.files.photos && req.files.photos.length > 0) {
+            if (req.body.photos && req.body.photos.length > 0) {
 
-                req.files.photos.map((file) => {
-                    body["photos"] = [...body["photos"], file.filename];
+                req.body.photos.map((file) => {
+                    body["photos"] = [...body["photos"], file];
                 });
             }
 

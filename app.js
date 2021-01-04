@@ -19,6 +19,7 @@ const commentsApiRouter = require("./routes/api/commentsRouter");
 const commentsAdminRouter = require("./routes/admin/commentRouter");
 const usersApiRouter = require("./routes/api/usersRouter");
 const usersAdminRouter = require("./routes/admin/usersRouter");
+const {resizeImages} = require("./helpers/resize");
 
 
 // Pour o2switch panel
@@ -43,12 +44,12 @@ app.use("/api", authApiRouter);
 app.use("/api/posts", postApiRouter);
 app.use("/api/category", categoryApiRouter);
 app.use("/api/comments", verifToken, commentsApiRouter);
-app.use("/api/users", verifToken,multer, usersApiRouter);
+app.use("/api/users", verifToken, multer, usersApiRouter);
 
 //Routes admin
 app.use("/admin", authAdminRouter);
 app.use("/admin/users", verifToken, multer, usersAdminRouter);
-app.use("/admin/posts", verifToken, multer, postAdminRouter);
+app.use("/admin/posts", verifToken, multer,resizeImages, postAdminRouter);
 app.use("/admin/category", verifToken, categoryAdminRouter);
 app.use("/admin/comments", verifToken, commentsAdminRouter);
 
