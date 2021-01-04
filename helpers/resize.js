@@ -13,7 +13,7 @@ const resizeImages = async (req, res, next) => {
                 const newFilename = `${id}.webp`;
 
                 await sharp(file.buffer)
-                    .resize(500, 300)
+                    .resize(620, 600)
                     .toFormat("webp")
                     .webp({quality: 90})
                     .toFile(`./public/images/${newFilename}`);
