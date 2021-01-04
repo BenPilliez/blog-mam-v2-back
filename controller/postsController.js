@@ -143,10 +143,7 @@ module.exports = {
 
             const body = req.body;
             const filteredArray = post.photos.filter((item) => !DEFAUlT_PHOTOS.includes(item));
-            console.log(filteredArray);
             body["photos"] = filteredArray.length > 0 ? [...req.body.photos, filteredArray.join("")] : req.body.photos;
-
-
             await post.update(req.body);
             return res.json(post);
 
